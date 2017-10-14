@@ -43,27 +43,6 @@ var layoutRows = {
 
 var canvasLayout = [];
 
-if (!("Proxy" in window)) {
-  console.warn("Your browser doesn't support Proxies.");
-
-}
-
-
-
-// a proxy for our array
-var canvasLayoutProxy = new Proxy(canvasLayout, {
-  deleteProperty: function(target, property) {
-    console.log("Deleted %s", property);
-    return true;
-  },
-  set: function(target, property, value, receiver) {
-    if (property != "length") {
-      addRegion(value);
-      target[property] = value;
-    }
-    return true;
-  }
-});
 
 var canvas = new fabric.Canvas("canvas");
 
@@ -198,7 +177,8 @@ add.on("click", function(e) {
       color
     };
     console.log("layout ", layout)
-    canvasLayoutProxy.push(layout);
+    canvasLayout.push(layout);
+    addRegion(layout);
 
     layoutRows.regions.push(regionSpecification);
     console.log("layoutRows: ", layoutRows)
