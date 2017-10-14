@@ -28,7 +28,7 @@ colorList = [
   "#FFC48C",
   "#00CC50",
   "#953DFF"
-  ];
+];
 
 var canvasElement = $("#canvas");
 var canvasHeight = (canvasElement.attr("height")) / 2;
@@ -44,39 +44,28 @@ var layoutRows = {
 var canvasLayout = [];
 
 if (!("Proxy" in window)) {
-    console.warn("Your browser doesn't support Proxies.");
+  console.warn("Your browser doesn't support Proxies.");
 
- }
+}
 
 
 
-  // a proxy for our array
-  var canvasLayoutProxy = new Proxy(canvasLayout, {
-    deleteProperty: function(target, property) {
-      console.log("Deleted %s", property);
-      return true;
-    },
-    set: function(target, property, value, receiver) {
-      if(property != "length") {
-        addRegion(value);
-        target[property] = value;
-      }
-      return true;
+// a proxy for our array
+var canvasLayoutProxy = new Proxy(canvasLayout, {
+  deleteProperty: function(target, property) {
+    console.log("Deleted %s", property);
+    return true;
+  },
+  set: function(target, property, value, receiver) {
+    if (property != "length") {
+      addRegion(value);
+      target[property] = value;
     }
-  });
+    return true;
+  }
+});
 
-  // console.log("Set a specific index..");
-  // proxy[0] = "x";
-  //
-  // console.log("Add via push()...");
-  // proxy.push("z");
-  //
-  // console.log("Add/remove via splice()...");
-  // proxy.splice(1, 3, "y");
-  //
-  // console.log("Current state of array: %o", array);
-
- var canvas = new fabric.Canvas("canvas");
+var canvas = new fabric.Canvas("canvas");
 
 
 function initialiseCanvas() {
@@ -119,10 +108,10 @@ function initialiseCanvas() {
   canvas.add(group);
 
   canvas.item(layoutRows.regions.length).set({
-      borderColor: "black",
-      cornerColor: "black",
-      cornerSize: 12,
-      transparentCorners: false
+    borderColor: "black",
+    cornerColor: "black",
+    cornerSize: 12,
+    transparentCorners: false
   });
 
   canvas.setActiveObject(canvas.item(layoutRows.regions.length));
@@ -138,7 +127,11 @@ function initialiseCanvas() {
     height: regionHeight
   };
 
-  var layout = { regionSpecification, name, color };
+  var layout = {
+    regionSpecification,
+    name,
+    color
+  };
   canvasLayout.push(layout);
   console.log("canvasLayout: ", canvasLayout);
 
@@ -191,9 +184,19 @@ add.on("click", function(e) {
     var color = colorList.shift();
     var id = name;
 
-    var regionSpecification = { id, y, x, width, height };
+    var regionSpecification = {
+      id,
+      y,
+      x,
+      width,
+      height
+    };
 
-    var layout = { regionSpecification, name, color };
+    var layout = {
+      regionSpecification,
+      name,
+      color
+    };
     console.log("layout ", layout)
     canvasLayoutProxy.push(layout);
 
@@ -207,104 +210,116 @@ add.on("click", function(e) {
 
 function addRegion(layout) {
 
-      var { regionSpecification, name, color } = layout;
+  var {
+    regionSpecification,
+    name,
+    color
+  } = layout;
 
-      console.log("Adding the following region: ", regionSpecification + " " + name + " " + color);
+  console.log("Adding the following region: ", regionSpecification + " " + name + " " + color);
 
-      //defining variables
-      var regionHeight = regionSpecification.height;
-      var regionWidth = regionSpecification.width;
-      var regionY = regionSpecification.y;
-      var regionX = regionSpecification.x;
-      var regionId = regionSpecification.id;
+  //defining variables
+  var regionHeight = regionSpecification.height;
+  var regionWidth = regionSpecification.width;
+  var regionY = regionSpecification.y;
+  var regionX = regionSpecification.x;
+  var regionId = regionSpecification.id;
 
-      //defining the sections in canvas
-      var rect = new fabric.Rect({
-        width: regionWidth,
-        height: regionHeight,
-        angle: 0,
-        fill: color,
-        originX: 'center',
-        originY: 'center'
-      });
+  //defining the sections in canvas
+  var rect = new fabric.Rect({
+    width: regionWidth,
+    height: regionHeight,
+    angle: 0,
+    fill: color,
+    originX: 'center',
+    originY: 'center'
+  });
 
-      var text = new fabric.Text(name, {
-        fontSize: 30,
-        originX: 'center',
-        originY: 'center'
-      });
+  var text = new fabric.Text(name, {
+    fontSize: 30,
+    originX: 'center',
+    originY: 'center'
+  });
 
-      var group = new fabric.Group([rect, text], {
-        id: regionId,
-        left: regionX,
-        top: regionY,
-        angle: 0,
-        hasRotatingPoint: false,
-        cornerStyle: "rect",
-        lockRotation: true,
-        lockScalingFlip: true,
-      });
+  var group = new fabric.Group([rect, text], {
+    id: regionId,
+    left: regionX,
+    top: regionY,
+    angle: 0,
+    hasRotatingPoint: false,
+    cornerStyle: "rect",
+    lockRotation: true,
+    lockScalingFlip: true,
+  });
 
-      //adding the sections
-      canvas.add(group);
-      console.log("Added")
+  //adding the sections
+  canvas.add(group);
 
-      canvas.item(layoutRows.regions.length).set(
-        {
-          borderColor: "black",
-          cornerColor: "black",
-          cornerSize: 12,
-          transparentCorners: false
-        }
-      );
-      canvas.setActiveObject(canvas.item(layoutRows.regions.length));
-      canvas.renderAll();
+  canvas.item(layoutRows.regions.length).set({
+    borderColor: "black",
+    cornerColor: "black",
+    cornerSize: 12,
+    transparentCorners: false
+  });
+  canvas.setActiveObject(canvas.item(layoutRows.regions.length));
+  canvas.renderAll();
 
 
 }
 
-function removeSelectedRegion () {
+function removeSelectedRegion() {
   var selectedRegion = canvas.getActiveObject();
-  console.log("selectedRegionId: ", selectedRegion.id);
-
-  const regionId = selectedRegion.id;
-
-  //Remove from layoutRows
-  console.log("layoutRows: ", layoutRows);
 
 
-  //Remove from canvasLayout
-  console.log("canvasLayout: ", canvasLayout);
+  if (selectedRegion != null && selectedRegion.id != 'A') {
 
-  //get the index of the element to be removed
-  var canvasLayoutRowId = -1;
+    console.log("selectedRegionId: ", selectedRegion.id);
 
-  for(var i = 0; i < canvasLayout.length; i++) {
-    if(canvasLayout[i].regionSpecification.id === regionId) {
-      canvasLayoutRowId = i;
-      break;
+    const regionId = selectedRegion.id;
+
+    //Remove from layoutRows
+    console.log("layoutRows: ", layoutRows);
+    var layoutRowId = -1;
+
+    for (var i = 0; i < layoutRows.regions.length; i++) {
+      if (layoutRows.regions[i].id === regionId) {
+        layoutRowId = i;
+        break;
+      }
     }
+
+    layoutRows.regions.splice(layoutRowId, 1);
+
+
+
+    //Remove from canvasLayout
+    console.log("canvasLayout: ", canvasLayout);
+
+    //get the index of the element to be removed
+    var canvasLayoutRowId = -1;
+
+    for (var i = 0; i < canvasLayout.length; i++) {
+      if (canvasLayout[i].regionSpecification.id === regionId) {
+        canvasLayoutRowId = i;
+        break;
+      }
+    }
+
+    //put back the color and name into the respective arrays
+    var name = canvasLayout[canvasLayoutRowId].name;
+    var color = canvasLayout[canvasLayoutRowId].color;
+    nameList.push(name);
+    colorList.push(color);
+
+    //remove the particular element from canvasLayout array
+    canvasLayout.splice(canvasLayoutRowId, 1);
+
+    //remove the selected object from the visible canvas
+    canvas.remove(canvas.getActiveObject());
+
   }
 
-
-  canvasLayout.splice(canvasLayoutRowId, 1);
-
-
-  console.log("After removal: ", canvasLayout);
-
-
-  //Refresh with canvasLayout
-  //refreshCanvasLayout();
 }
-
-function refreshCanvasLayout() {
-
-}
-
-
-
-
-
 
 remove.on("click", function(e) {
 
