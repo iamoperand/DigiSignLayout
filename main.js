@@ -80,8 +80,8 @@ if (!("Proxy" in window)) {
 
 
 function initialiseCanvas() {
-  var regionHeight = layoutRows.height / 2;
-  var regionWidth = layoutRows.width / 2;
+  var regionHeight = layoutRows.height;
+  var regionWidth = layoutRows.width;
   var regionY = Math.floor(Math.random() * regionHeight + 0);
   var regionX = Math.floor(Math.random() * regionWidth + 0);
   var name = nameList.shift();
@@ -128,6 +128,8 @@ function initialiseCanvas() {
   canvas.setActiveObject(canvas.item(layoutRows.regions.length));
   canvas.renderAll();
 
+
+
   var regionSpecification = {
     id: regionId,
     y: regionY,
@@ -137,9 +139,12 @@ function initialiseCanvas() {
   };
 
   var layout = { regionSpecification, name, color };
-
   canvasLayout.push(layout);
   console.log("canvasLayout: ", canvasLayout);
+
+  layoutRows.regions.push(regionSpecification);
+
+
 
   canvas.on("object:moving", function(t) {
     var e = t.target;
@@ -177,23 +182,23 @@ function initialiseCanvas() {
 initialiseCanvas();
 
 add.on("click", function(e) {
-  if (layoutRows.regions.length < 9) {
+  if (layoutRows.regions.length < 10) {
     var height = layoutRows.height;
     var width = layoutRows.width;
-    var y = Math.floor(Math.random() * height / 2 + 0);
-    var x = Math.floor(Math.random() * width / 2 + 0);
+    var y = Math.floor(Math.random() * height + 0);
+    var x = Math.floor(Math.random() * width + 0);
     var name = nameList.shift();
     var color = colorList.shift();
     var id = name;
 
     var regionSpecification = { id, y, x, width, height };
 
-    layoutRows.regions.push(regionSpecification);
-    console.log("layoutRows: ", layoutRows)
-
     var layout = { regionSpecification, name, color };
     console.log("layout ", layout)
     canvasLayoutProxy.push(layout);
+
+    layoutRows.regions.push(regionSpecification);
+    console.log("layoutRows: ", layoutRows)
 
     console.log("canvasLayout: ", canvasLayout)
   }
@@ -260,6 +265,37 @@ function addRegion(layout) {
 
 function removeSelectedRegion () {
   var selectedRegion = canvas.getActiveObject();
+  console.log("selectedRegionId: ", selectedRegion.id);
+
+  const regionId = selectedRegion.id;
+
+  //Remove from layoutRows
+  console.log("layoutRows: ", layoutRows);
+
+
+  //Remove from canvasLayout
+  console.log("canvasLayout: ", canvasLayout);
+
+  //get the index of the element to be removed
+  var canvasLayoutRowId = -1;
+
+  for(var i = 0; i < canvasLayout.length; i++) {
+    if(canvasLayout[i].regionSpecification.id === regionId) {
+      canvasLayoutRowId = i;
+      break;
+    }
+  }
+
+
+  canvasLayout.splice(canvasLayoutRowId, 1);
+
+
+  console.log("After removal: ", canvasLayout);
+  //Refresh with canvasLayout
+  // refreshCanvasLayout();
+}
+
+function refreshCanvasLayout() {
 
 }
 
@@ -269,7 +305,9 @@ function removeSelectedRegion () {
 
 
 remove.on("click", function(e) {
-  console.log(e);
+
+  removeSelectedRegion();
+
 });
 
 raise.on("click", function(e) {
