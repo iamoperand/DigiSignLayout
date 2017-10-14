@@ -129,6 +129,7 @@ function initialiseCanvas() {
   canvas.renderAll();
 
   var regionSpecification = {
+    id: regionId,
     y: regionY,
     x: regionX,
     width: regionWidth,
@@ -183,8 +184,9 @@ add.on("click", function(e) {
     var x = Math.floor(Math.random() * width / 2 + 0);
     var name = nameList.shift();
     var color = colorList.shift();
+    var id = name;
 
-    var regionSpecification = { y, x, width, height };
+    var regionSpecification = { id, y, x, width, height };
 
     layoutRows.regions.push(regionSpecification);
     console.log("layoutRows: ", layoutRows)
@@ -209,7 +211,7 @@ function addRegion(layout) {
       var regionWidth = regionSpecification.width;
       var regionY = regionSpecification.y;
       var regionX = regionSpecification.x;
-      var regionId = name;
+      var regionId = regionSpecification.id;
 
       //defining the sections in canvas
       var rect = new fabric.Rect({
@@ -253,6 +255,11 @@ function addRegion(layout) {
       canvas.setActiveObject(canvas.item(layoutRows.regions.length));
       canvas.renderAll();
 
+
+}
+
+function removeSelectedRegion () {
+  var selectedRegion = canvas.getActiveObject();
 
 }
 
