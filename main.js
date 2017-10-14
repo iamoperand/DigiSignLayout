@@ -302,15 +302,16 @@ function removeSelectedRegion() {
 }
 
 remove.on("click", function(e) {
-
   removeSelectedRegion();
-
 });
 
 raise.on("click", function(e) {
-  console.log(e);
+
+    var selectedRegion = canvas.getActiveObject();
+    canvas.bringForward(selectedRegion);
 });
 
 lower.on("click", function(e) {
-  console.log(e);
+    var selectedRegion = canvas.getActiveObject();
+    canvas.sendBackwards(selectedRegion);
 });
