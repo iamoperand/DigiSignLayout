@@ -291,8 +291,10 @@ function removeSelectedRegion () {
 
 
   console.log("After removal: ", canvasLayout);
+
+
   //Refresh with canvasLayout
-  // refreshCanvasLayout();
+  //refreshCanvasLayout();
 }
 
 function refreshCanvasLayout() {
