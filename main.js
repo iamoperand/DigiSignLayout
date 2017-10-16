@@ -45,6 +45,7 @@ var canvasLayout = [];
 
 
 var canvas = new fabric.Canvas("canvas");
+canvas.preserveObjectStacking = true;
 
 
 function initialiseCanvas() {
@@ -90,7 +91,8 @@ function initialiseCanvas() {
     borderColor: "black",
     cornerColor: "black",
     cornerSize: 12,
-    transparentCorners: false
+    transparentCorners: false,
+    opacity: .7
   });
 
   canvas.setActiveObject(canvas.item(layoutRows.regions.length));
@@ -239,7 +241,8 @@ function addRegion(layout) {
     borderColor: "black",
     cornerColor: "black",
     cornerSize: 12,
-    transparentCorners: false
+    transparentCorners: false,
+    opacity: .7
   });
   canvas.setActiveObject(canvas.item(layoutRows.regions.length));
   canvas.renderAll();
@@ -316,7 +319,8 @@ raise.on("click", function(e) {
        'borderColor',
        'cornerColor',
        'cornerSize',
-       'transparentCorners']
+       'transparentCorners',
+       'opacity']
      );
     console.log("Raising: ", json);
     canvas.clear();
@@ -335,7 +339,8 @@ lower.on("click", function(e) {
        'borderColor',
        'cornerColor',
        'cornerSize',
-       'transparentCorners']
+       'transparentCorners',
+       'opacity']
      );
     console.log("Lowering: ", json);
     canvas.clear();
