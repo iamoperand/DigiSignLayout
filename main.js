@@ -76,17 +76,17 @@ function initialiseCanvas() {
     id: regionId,
     left: regionX,
     top: regionY,
-    angle: 0,
-    hasRotatingPoint: false,
-    cornerStyle: "rect",
-    lockRotation: true,
-    lockScalingFlip: true,
+    angle: 0
   });
 
   //adding the sections
   canvas.add(group);
 
   canvas.item(layoutRows.regions.length).set({
+    hasRotatingPoint: false,
+    cornerStyle: "rect",
+    lockRotation: true,
+    lockScalingFlip: true,
     borderColor: "black",
     cornerColor: "black",
     cornerSize: 12,
@@ -225,17 +225,17 @@ function addRegion(layout) {
     id: regionId,
     left: regionX,
     top: regionY,
-    angle: 0,
-    hasRotatingPoint: false,
-    cornerStyle: "rect",
-    lockRotation: true,
-    lockScalingFlip: true,
+    angle: 0
   });
 
   //adding the sections
   canvas.add(group);
 
   canvas.item(layoutRows.regions.length).set({
+    hasRotatingPoint: false,
+    cornerStyle: "rect",
+    lockRotation: true,
+    lockScalingFlip: true,
     borderColor: "black",
     cornerColor: "black",
     cornerSize: 12,
@@ -306,12 +306,38 @@ remove.on("click", function(e) {
 });
 
 raise.on("click", function(e) {
-
     var selectedRegion = canvas.getActiveObject();
     canvas.bringForward(selectedRegion);
+    var json = canvas.toJSON(
+      ['hasRotatingPoint',
+       'cornerStyle',
+       'lockRotation',
+       'lockScalingFlip',
+       'borderColor',
+       'cornerColor',
+       'cornerSize',
+       'transparentCorners']
+     );
+    console.log("Raising: ", json);
+    canvas.clear();
+    canvas.loadFromJSON(json, canvas.renderAll.bind(canvas));
+
 });
 
 lower.on("click", function(e) {
     var selectedRegion = canvas.getActiveObject();
     canvas.sendBackwards(selectedRegion);
+    var json = canvas.toJSON(
+      ['hasRotatingPoint',
+       'cornerStyle',
+       'lockRotation',
+       'lockScalingFlip',
+       'borderColor',
+       'cornerColor',
+       'cornerSize',
+       'transparentCorners']
+     );
+    console.log("Lowering: ", json);
+    canvas.clear();
+    canvas.loadFromJSON(json, canvas.renderAll.bind(canvas));
 });
